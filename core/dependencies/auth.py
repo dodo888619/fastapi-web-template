@@ -21,7 +21,7 @@ async def auth(Authorization: str = Header(...)):
         JSONResponse({"error_info": msg, "error_type": "auth_error"}, status_code=401)
     parts = auth.split()
     if len(parts) != 2 or parts[0] != header_type:
-        msg = "Bad {} header. Expected value '{} <JWT>'".format(header_name, header_type)
+        msg = f"Bad {header_name} header. Expected value '{header_type} <JWT>'"
         return JSONResponse({"error_info": msg, "error_type": "auth_error"}, status_code=401)
     try:
         payload = jwt.decode(parts[1], config.TOKEN_SECRET_KEY, algorithms=algorithms)
