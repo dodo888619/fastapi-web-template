@@ -50,7 +50,7 @@ class ConnectionManager:
         except WebSocketDisconnect:
             return
         except Exception as e:
-            await self.send_personal_message(f"token error", session)
+            await self.send_personal_message("token error", session)
             await self.disconnect(session)
             return False
 
@@ -68,10 +68,10 @@ class ConnectionManager:
                 await self.send_personal_message('a[{"result":"success"}]', session)
                 return True
             except:
-                await self.send_personal_message(f"You token is inviled", session)
+                await self.send_personal_message("You token is inviled", session)
                 await self.disconnect(session)
         else:
-            await self.send_personal_message(f"need token", session)
+            await self.send_personal_message("need token", session)
             await self.disconnect(session)
 
     async def receive_json(self, session: WebSocket):
@@ -87,7 +87,7 @@ class ConnectionManager:
 
     async def broadcast(self, message: str):
         for connection in self.active_connections:
-            msg = "a" + json.dumps([message])
+            msg = f"a{json.dumps([message])}"
             await connection.send_text(msg)
 
     def start(self):
@@ -131,8 +131,7 @@ class ConnectionManager:
         """
         心跳检测
         """
-        sessions = self.active_connections
-        if sessions:
+        if sessions := self.active_connections:
             now = datetime.now()
 
             idx = 0
@@ -166,11 +165,7 @@ class ConnectionManager:
         """
         提取session的id
         """
-        if hasattr(session, "user_id"):
-            session_id = session.user_id
-        else:
-            session_id = session.url
-        return session_id
+        return session.user_id if hasattr(session, "user_id") else session.url
 
 
 html = """

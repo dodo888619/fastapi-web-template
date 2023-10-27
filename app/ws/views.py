@@ -37,10 +37,9 @@ async def sockjs_info_view(t: Optional[int]):
     """
     伪造sockjs的info接口
     """
-    data = {
+    return {
         "entropy": random.randint(1, 2147483647),
     }
-    return data
 
 
 async def broadcast_msg_view(req: BroadcastMsgReq):

@@ -10,15 +10,11 @@ def str2bool(v):
 def str2int(v):
     if v is None:
         return v
-    if v == "":
-        return None
-    return int(v)
+    return None if v == "" else int(v)
 
 
 def str2float(v):
-    if v is None:
-        return v
-    return int(v)
+    return v if v is None else int(v)
 
 
 class Base:

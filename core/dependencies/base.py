@@ -13,8 +13,7 @@ async def base(request: Request):
     """
     from core.middleware.fastapi_globals import g
 
-    lang = request.headers.get("Accept-Language")
-    if lang:
+    if lang := request.headers.get("Accept-Language"):
         g.locale = lang.split(",")[0]
     else:
         g.locale = "zh-CN"

@@ -15,14 +15,12 @@ class CommandMetaclass(type):
         command_desc = "..."
         executor = None
         for k, v in attrs.items():
-            if k == "execute":
-                executor = obj.execute
-            # 指定命令名
-            if k == "command_str":
-                command_str = v
-            # 指定命令描述
             if k == "command_desc":
                 command_desc = v
+            elif k == "command_str":
+                command_str = v
+            elif k == "execute":
+                executor = obj.execute
         cls.registry_commands[command_str] = executor
         cls.commands_desc[command_str] = command_desc
         return obj

@@ -152,7 +152,7 @@ class StartAppCommand(CommandBase):
         cls.add_scheme_file()
         cls.add_view_file()
         cls.runner_file_handler()
-        print("create app ' %s ' success" % app_name)
+        print(f"create app ' {app_name} ' success")
 
     @classmethod
     def init_dir(cls):
@@ -172,7 +172,7 @@ class StartAppCommand(CommandBase):
         """
         创建目录和init文件
         """
-        api_file_path = os.path.join(cls.root, f"apis.py")
+        api_file_path = os.path.join(cls.root, "apis.py")
         with open(api_file_path, "w") as f:
             f.write(cls.copyright_str)
             f.write(apis_file.format(AppName=str2camel(cls.app_name), app_name=cls.app_name))
@@ -202,7 +202,7 @@ class StartAppCommand(CommandBase):
         """
         创建view文件
         """
-        api_file_path = os.path.join(cls.root, f"views.py")
+        api_file_path = os.path.join(cls.root, "views.py")
         with open(api_file_path, "w") as f:
             f.write(cls.copyright_str)
             f.write(views_file.format(AppName=str2camel(cls.app_name), app_name=cls.app_name))
@@ -231,11 +231,18 @@ class StartAppCommand(CommandBase):
                 if c == "":
                     break
                 elif "+gencode:register-router" in c:
-                    new_c.append(f"    from app.{cls.app_name}.apis import router as {cls.app_name}_router\n")
-                    new_c.append(f"    app.include_router({cls.app_name}_router)\n\n")
+                    new_c.extend(
+                        (
+                            f"    from app.{cls.app_name}.apis import router as {cls.app_name}_router\n",
+                            f"    app.include_router({cls.app_name}_router)\n\n",
+                        )
+                    )
                 elif "+gencode:configure-model" in c:
-                    new_c.append(f"    # noinspection PyUnresolvedReferences\n")
-                    new_c.append(f"    from app.{cls.app_name} import models\n\n")
-
+                    new_c.extend(
+                        (
+                            f"    # noinspection PyUnresolvedReferences\n",
+                            f"    from app.{cls.app_name} import models\n\n",
+                        )
+                    )
         with open("main.py", "w") as f:
             f.writelines(new_c)
